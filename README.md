@@ -10,8 +10,13 @@ REST Api exposing a finetuned bank statement clasificator model
 
 ## learning path
 
-- [ ]  Add kubernetes to the mix
-- [ ]  Add Openshift
-- [ ]  Add Cloud
-- [ ]  CI / CD with github actions
-
+- [ ]  Deploy image created, (versioned) from local 
+  - [ ]  Think versioning strategy
+- [ ]  Configure kubernetes secrets / AWS secret manager
+- [ ]  Use Terraform for creating infrastructure (EKS)
+- [ ]  Configure Github Actions
+  - [ ]  Add CI / CD Pipeline (workflow)
+    - [ ]  github/workflows/deploy.yml (build, test, and deploy)
+    - [ ]  Build new image from docker file when push to main
+    - [ ]  push image to EKS
+  - [ ]  Credentials to connect to EKS
