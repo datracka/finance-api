@@ -27,7 +27,15 @@ datracka
 
 ## ROADMAP
 
-// pending
+- Deploy dummy app in AWS using GA as CI and Terraform for IaaS
+- Make it more complex splitting app in FE / BE and DB
+
+## TODOS
+
+following this: https://octopus.com/blog/deploying-amazon-eks-github-actions
+
+- [ ]  Create ECR instance
+- [ ]  Add ECR repo to github secrets
 
 ## learning path
 
