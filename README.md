@@ -4,6 +4,8 @@
 
 REST Api exposing a finetuned bank statement clasificator model
 
+--
+
 ## How to
 
 ### EKS Management using eksctl
