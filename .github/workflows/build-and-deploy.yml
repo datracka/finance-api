@@ -51,7 +51,7 @@ jobs:
         run: docker logout
 
   deploy:
-    if: github.event_name == 'release' && github.event.action == 'created'
+    if: github.event_name == 'release'
     runs-on: ubuntu-latest
 
     env:
