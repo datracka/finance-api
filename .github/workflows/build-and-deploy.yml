@@ -12,7 +12,7 @@ on:
 
 jobs:
   build:
-    if: github.event_name != 'release'
+    if: ${{ github.event_name != 'release' }}
     runs-on: ubuntu-latest
 
     env:
@@ -51,7 +51,7 @@ jobs:
         run: docker logout
 
   deploy:
-    if: github.event_name == 'release'
+    if: ${{ github.event_name == 'release' }}
     runs-on: ubuntu-latest
 
     env:
