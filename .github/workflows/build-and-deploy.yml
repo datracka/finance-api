@@ -11,7 +11,7 @@ on:
     types: [created, edited]  
 
 jobs:
-  build-and-deploy:
+  build:
     if: github.event_name != 'release'
     runs-on: ubuntu-latest
 
