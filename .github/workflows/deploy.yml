@@ -32,7 +32,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/$IMAGE_NAME:$IMAGE_TAG
+          tags: datracka/$IMAGE_NAME:$IMAGE_TAG
 
     #  - name: Build Docker image
     #    run: docker build -t $DOCKER_HUB_REPOSITORY:$IMAGE_TAG .
