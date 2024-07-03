@@ -3,17 +3,17 @@ name: Build and Push Docker Image and Deploy to EKS
 on:
   push:
     branches:
-      - main  
+      - main
   pull_request:
     branches:
-      - main  
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     env:
-      DOCKER_HUB_REPOSITORY: ${{ secrets.DOCKER_HUB_REPOSITORY }} 
+      DOCKER_HUB_REPOSITORY: ${{ secrets.DOCKER_HUB_REPOSITORY }}
       IMAGE_NAME: "api"
       IMAGE_TAG: ${{ github.sha }}
 
@@ -27,8 +27,8 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }} 
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} 
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
@@ -40,9 +40,9 @@ jobs:
       - name: Configure kubectl
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}  
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  
-          aws-region: ${{ secrets.AWS_REGION }}  
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Logout from Docker Hub
         run: docker logout
@@ -56,7 +56,7 @@ jobs:
       EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
       DOCKER_HUB_REPOSITORY: ${{ secrets.DOCKER_HUB_REPOSITORY }}
       IMAGE_NAME: "api"
-      IMAGE_TAG: ${{ github.sha }} 
+      IMAGE_TAG: ${{ github.sha }}
 
     steps:
       - name: Checkout repository
@@ -78,14 +78,14 @@ jobs:
       - name: Update kubeconfig
         run: |
           aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER_NAME }}
-      
+
       - name: Verify kubectl connection
         run: |
           kubectl get nodes
 
       - name: Prepare deployment file
         run: |
-          sed -i "s|image: .*/api:.*|image: ${{ env.DOCKER_HUB_REPOSITORY }}/api:${{ env.IMAGE_TAG }}|" deployment.yml
+          sed -i "s|image: PLACEHOLDER_IMAGE|image: ${{ env.DOCKER_HUB_REPOSITORY }}:${{ env.IMAGE_TAG }}|" deployment.yml
           cat deployment.yml  # Output the deployment file for verification
 
       - name: Deploy to EKS
