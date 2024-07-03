@@ -4,8 +4,6 @@
 
 REST Api exposing a finetuned bank statement clasificator model
 
---
-
 ## How to
 
 ### EKS Management using eksctl
@@ -19,7 +17,7 @@ REST Api exposing a finetuned bank statement clasificator model
 
 ### run dashboard
 
-pending check related project 
+pending check related project
 
 ## run docker and kubernetes
 
@@ -30,60 +28,25 @@ run `kubectl apply -f deployment.yaml`
 
 to get session: `aws sts get-session-token --duration-seconds 3600`
 
-## Docker **repository**
-
-datracka
-
-## ROADMAP
-
-* Deploy dummy app in AWS using GA as CI and Terraform for IaaS
-* Make it more complex splitting app in FE / BE and DB
+docker repository: datracka/api
 
 ## TODOS
 
-following this: https://octopus.com/blog/deploying-amazon-eks-github-actions
+* [x] Configure local and create App
+* [x] Cloud EKS instance cluster / nodes created and AWS configured
+* Github CI
+  * [x] build and deploy actions done!  
+  * [ ] Split build from deploy.
+    * build done eacth time a PR or push to main
+    * deploy each time a tag / release is created
+* java improvements
+  * [ ] maven pom.xml is updated each time a tag is created
+  * [ ] Add an easy test and add it to the build
+* [ ] Use terraform to create EKS instances
+* [ ] Learn about blue / green, canary
+* [ ] Increase app complexity and scale kubernetes
+* [ ] Eventually move from AWS
 
-* [ ]  Create ECR instance
-* [ ]  Add ECR repo to github secrets
-* [ ]  
+Interesting links
 
-## Gitbub Action
-
-### CI
-
-* [ ] build
-* [ ] test
-* [ ] deploy
-
-Perrequisites:
-
-* Registry on place (docker)
-* Configure secrets from docker
-
-steps:
-
-On PR to main
-
-* Configure AWS credentials
-* Login to Docker Hub
-* Build Image and push to Docker Hub
-  * Maybe test also 
-  * Maybe Tag the repo or the image or what
-
-### Cloud / AWS EKS
-
-* Manually
-  * Configure EKS to use docker hub
-  * Create EKS instances
-* Do the same with terraform
-
-## Learning Path
-
-* Dockerize
-  * [x]  Deploy image created, (versioned) from local
-* CI
-  * [ ] Github actions
-* CD
-  * [ ]  Think versioning strategy
-* [ ]  Use Terraform for creating infrastructure (EKS)
-  
+https://octopus.com/blog/deploying-amazon-eks-github-actions
