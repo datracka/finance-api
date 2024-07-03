@@ -8,7 +8,7 @@ on:
     branches:
       - main  
   release:
-    types: [created]  
+    types: [created, edited]  
 
 jobs:
   build-and-deploy:
