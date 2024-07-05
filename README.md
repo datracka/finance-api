@@ -4,49 +4,49 @@
 
 REST Api exposing a finetuned bank statement clasificator model
 
-## How to
+### Run dashboard
 
-### EKS Management using eksctl
+1. install kubernetes dashboard
 
-* Create a cluster `eksctl create cluster --name test-cluster --nodegroup-name test-nodes --node-type t3.medium --nodes 1 --nodes-min 1 --nodes-max 1  --managed`
+   ```shell
+   kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+   ```
 
-* Delete a cluster `eksctl delete cluster --name test-cluster`
-* Delete all: check cleanup_script.sh
+2. Run a Service Account
 
-* Check Cluster status `aws cloudformation list-stacks --stack-status-filter CREATE_IN_PROGRESS CREATE_FAILED CREATE_COMPLETE ROLLBACK_IN_PROGRESS ROLLBACK_FAILED ROLLBACK_COMPLETE DELETE_IN_PROGRESS DELETE_FAILED DELETE_COMPLETE`
+   ```shell
+   kubectl apply -f dashboard.adminuser.yml
+   ```
 
-### run dashboard
+3. Get a token and copy the token into your clipboard.
 
-pending check related project
+   ```shell
+   kubectl -n kubernetes-dashboard create token admin-user
+   ```
 
-## run docker and kubernetes
+4. Run the dashaboard
+  
+   ```shell
+   kubectl proxy
+   ```
+
+5. Visit !()[http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/]
+6. Paste the token into the login screen and you can then sign in to the dashboard.
+
+## Run docker and kubernetes
+
+In Visual Code
 
 run `docker image: VC, docker image build`
+
+Then
+
 run `kubectl apply -f deployment.yaml`
 
-## Amazon
+## Cloud (WIP)
 
-to get session: `aws sts get-session-token --duration-seconds 3600`
+To get the external IP `kubectl get service api-service`
 
-docker repository: datracka/api
+docker repository: `datracka/api`
 
-## TODOS
-
-* [x] Configure local and create App
-* [x] Cloud EKS instance cluster / nodes created and AWS configured
-* Github CI
-  * [x] build and deploy actions done!  
-  * [ ] Split build from deploy.
-    * build done eacth time a PR or push to main
-    * deploy each time a tag / release is created
-* java improvements
-  * [ ] maven pom.xml is updated each time a tag is created
-  * [ ] Add an easy test and add it to the build
-* [ ] Use terraform to create EKS instances
-* [ ] Learn about blue / green, canary
-* [ ] Increase app complexity and scale kubernetes
-* [ ] Eventually move from AWS
-
-Interesting links
-
-https://octopus.com/blog/deploying-amazon-eks-github-actions
+context `arn:aws:eks:eu-west-3:590183910983:cluster/test-cluster
