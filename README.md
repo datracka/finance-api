@@ -49,4 +49,4 @@ To get the external IP `kubectl get service api-service`
 
 docker repository: `datracka/api`
 
-context `arn:aws:eks:eu-west-3:590183910983:cluster/test-cluster
+context `arn:aws:eks:eu-west-3:590183910983:cluster/test-cluster`
