@@ -1,4 +1,4 @@
-name: Build and Push Docker Image and Deploy to EKS
+name: Build and Push Docker Image
 
 on:
   push:
@@ -37,57 +37,5 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
-      - name: Configure kubectl
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
       - name: Logout from Docker Hub
         run: docker logout
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    env:
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
-      DOCKER_HUB_REPOSITORY: ${{ secrets.DOCKER_HUB_REPOSITORY }}
-      IMAGE_NAME: "api"
-      IMAGE_TAG: ${{ github.sha }}
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Install kubectl
-        run: |
-          curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
-          chmod +x ./kubectl
-          sudo mv ./kubectl /usr/local/bin/kubectl
-
-      - name: Update kubeconfig
-        run: |
-          aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER_NAME }}
-
-      - name: Verify kubectl connection
-        run: |
-          kubectl get nodes
-
-      - name: Prepare deployment file
-        run: |
-          sed -i "s|image: PLACEHOLDER_IMAGE|image: ${{ env.DOCKER_HUB_REPOSITORY }}:${{ env.IMAGE_TAG }}|" deployment.yml
-          cat deployment.yml  # Output the deployment file for verification
-
-      - name: Deploy to EKS
-        run: |
-          kubectl apply -f deployment.yml
