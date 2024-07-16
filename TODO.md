@@ -20,9 +20,13 @@
 
 ### jenkins-test branch
 
-- [ ] Understanding Jenkins
-- [ ] Understanding openshift
+Next: 
 
+- [ ] Finalize understanding Jenkins ![Swingin' CICD with Spring Boot, Docker & Jenkins on OpenShift](https://www.youtube.com/watch?v=6YZvp2GwT0A)
+  - [ ] Installed agent as cloud using Docker image
+  - [ ] video in 48.20
+  - [ ] Build hello world java in jenkins using jenking file
+- [ ] Understanding openshift ![Learn Jenkins! Complete Jenkins Course - Zero to Hero](https://www.youtube.com/watch?v=UeABGTh4UjU)
 
 ## Interesting links
 
