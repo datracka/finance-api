@@ -1,5 +1,5 @@
 pipeline {
-    
+    agent any
     
     environment {
         DOCKER_CREDENTIALS_ID = 'docker-credentials'
