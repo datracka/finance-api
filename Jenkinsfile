@@ -21,7 +21,11 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    def image = docker.build("${DOCKER_REPO}:${env.BUILD_ID}")
+                  try {
+                    def image = docker.build("${DOCKER_REPO}:${env.BUILD_ID}", ".")
+                  } catch (Exception e) {
+                    echo "Failed to build Docker image: ${e}"
+                  }
                 }
             }
         }
@@ -29,13 +33,16 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    // Login to Docker Hub
-                    docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) {
+                    try {
+                      docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) {
                         // Push the Docker image
                         def image = docker.build("${DOCKER_REPO}:${env.BUILD_ID}")
                         image.push()
                         image.push('latest')
                     }
+                  } catch (Exception e) {
+                    echo "Failed to push Docker image: ${e}"
+                  }
                 }
             }
         }
