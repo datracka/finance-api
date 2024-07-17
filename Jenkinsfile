@@ -1,5 +1,13 @@
 pipeline {
     agent any
+
+    /*
+    agent {
+      node {
+        label 'docker-cloud'
+      }
+    }
+    */
     
     environment {
         DOCKER_CREDENTIALS_ID = 'docker-credentials'
@@ -18,7 +26,7 @@ pipeline {
             steps {
                 script {
                   try {
-                    def image = docker.build("${DOCKER_REPO}:${env.BUILD_ID}", ".")
+                     sh -c 'docker build -t ${DOCKER_REPO}:${env.BUILD_ID} .'
                   } catch (Exception e) {
                     echo "Failed to build Docker image: ${e}"
                   }
@@ -31,11 +39,9 @@ pipeline {
                 script {
                     try {
                       docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) {
-                        // Push the Docker image
-                        def image = docker.build("${DOCKER_REPO}:${env.BUILD_ID}")
-                        image.push()
-                        image.push('latest')
-                    }
+                        sh -c "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
+                      }
+                      sh "docker push ${DOCKER_REPO}:${env.BUILD_ID}"
                   } catch (Exception e) {
                     echo "Failed to push Docker image: ${e}"
                   }
