@@ -14,8 +14,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout the repository from GitHub
-                git url: 'https://github.com/datracka
-                /finance-api.git', branch: 'main'
+                git url: 'https://github.com/datracka/finance-api.git', branch: 'main'
             }
         }
 
