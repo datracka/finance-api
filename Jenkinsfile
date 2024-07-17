@@ -1,13 +1,5 @@
 pipeline {
     agent any
-
-    /*
-    agent {
-      node {
-        label 'docker-cloud'
-      }
-    }
-    */
     
     environment {
         DOCKER_CREDENTIALS_ID = 'docker-credentials'
@@ -25,21 +17,9 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                     sh -c 'docker build -t ${DOCKER_REPO}:${env.BUILD_ID} .'
+                     sh 'docker build -t ${DOCKER_REPO}:${env.BUILD_ID} .'
                 }
             }
         }
-        /*
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) {
-                      sh -c "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
-                    }
-                    sh "docker push ${DOCKER_REPO}:${env.BUILD_ID}"
-                }
-            }
-        }
-        */
     }
 }
