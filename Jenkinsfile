@@ -1,9 +1,5 @@
 pipeline {
-    agent {
-      node {
-        label 'docker-cloud'
-      }
-    }
+    agent any
     
     environment {
         DOCKER_CREDENTIALS_ID = 'docker-credentials'
