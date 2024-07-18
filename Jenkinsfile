@@ -21,7 +21,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${DOCKER_REPO}:0.0.1", ".")
+                     sh 'docker build -t ${DOCKER_REPO}:0.0.1 .'
                 }
             }
         }
@@ -29,10 +29,10 @@ pipeline {
          stage('Docker Push') {
             steps {
                 script {
-                    docker.withRegistry('', DOCKER_CREDENTIALS) {
-                        def image = docker.image("${DOCKER_REPO}:0.0.1")
-                        image.push()
+                    withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
                     }
+                    sh 'docker push ${DOCKER_REPO}:0.0.1'
                 }
             }
         }
