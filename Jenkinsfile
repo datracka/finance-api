@@ -21,7 +21,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${DOCKER_REPO}:${env.BUILD_ID}", ".")
+                    docker.build("${DOCKER_REPO}:0.0.1", ".")
                 }
             }
         }
@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('', DOCKER_CREDENTIALS) {
-                        def image = docker.image("${DOCKER_REPO}:${env.BUILD_ID}")
+                        def image = docker.image("${DOCKER_REPO}:0.0.1")
                         image.push()
                     }
                 }
