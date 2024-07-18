@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+      node {
+        label 'docker-cloud'
+      }
+    }
     
     environment {
         DOCKER_CREDENTIALS_ID = 'docker-credentials'
@@ -17,7 +21,18 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                     sh 'docker build -t ${DOCKER_REPO}:${env.BUILD_ID} .'
+                    docker.build("${DOCKER_REPO}:${env.BUILD_ID}", ".")
+                }
+            }
+        }
+
+         stage('Docker Push') {
+            steps {
+                script {
+                    docker.withRegistry('', DOCKER_CREDENTIALS) {
+                        def image = docker.image("${DOCKER_REPO}:${env.BUILD_ID}")
+                        image.push()
+                    }
                 }
             }
         }
