@@ -17,18 +17,22 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                     sh 'docker build -t ${DOCKER_REPO}:${env.BUILD_ID} .'
+                    // Print the BUILD_ID for debugging
+                    echo "Build ID: ${env.BUILD_ID}"
+                    
+                    // Use the sh step to run the Docker build command
+                    sh "docker build -t ${DOCKER_REPO}:${env.BUILD_ID} ."
                 }
             }
         }
-
+        
          stage('Docker Push') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
                     }
-                    sh 'docker push ${DOCKER_REPO}:${env.BUILD_ID}'
+                    sh "docker push ${DOCKER_REPO}:${env.BUILD_ID}"
                 }
             }
         }
