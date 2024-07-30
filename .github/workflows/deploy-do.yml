@@ -1,0 +1,11 @@
+name: Deploy to Kubernetes on Digital Ocean 
+
+on:
+  workflow_dispatch:
+    inputs:
+        image_tag:
+          description: 'Docker image to deploy'
+          required: true
+          default: 'latest'
+
+jobs:
