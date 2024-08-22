@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: api-deployment
+  # namespace: finance-api # by default, it will be created in the default namespace
   labels:
     app: api
 spec:
@@ -16,6 +17,10 @@ spec:
     spec:
       containers:
       - name: api-container
-        image: PLACEHOLDER_IMAGE
+        image: PLACEHOLDER_IMAGE # PLACEHOLDER_IMAGE
+        resources:
+          limits:
+            cpu: "1"
+            memory: "512Mi"
         ports:
         - containerPort: 80
