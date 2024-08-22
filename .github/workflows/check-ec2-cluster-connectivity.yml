@@ -20,6 +20,10 @@ jobs:
           chmod +x ./kubectl
           sudo mv ./kubectl /usr/local/bin/kubectl
 
+      - name: Create .kube directory
+        run: |
+          mkdir -p ~/.kube
+
       - name: Set up kubeconfig from secret
         run: |
           echo "${{ secrets.KUBECONFIG_CONTENT }}" > ~/.kube/config
