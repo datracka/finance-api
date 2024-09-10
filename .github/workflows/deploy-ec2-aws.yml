@@ -36,7 +36,7 @@ jobs:
 
       - name: Prepare deployment file
         run: |
-          sed -i "s|image: .*/api:.*|image: ${{ env.DOCKER_HUB_REPOSITORY }}/api:${{ env.IMAGE_TAG }}|" deployment.yml
+          sed -i "s|image: PLACEHOLDER_IMAGE|image: ${{ env.DOCKER_HUB_REPOSITORY }}:${{ env.IMAGE_TAG }}|" deployment.yml
           cat deployment.yml  # Output the deployment file for verification
 
       - name: Deploy to self-managed K8S
