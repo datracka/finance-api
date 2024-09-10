@@ -16,10 +16,10 @@ Then
 
 run `kubectl apply -f deployment.yaml`
 
-## Cloud (WIP)
+## Cloud
 
-To get the external IP `kubectl get service api-service`
+We are deploying in a EC2 AWS instance using kubernetes. 
 
-docker repository: `datracka/api`
+Image build happens automatically using github actions
 
-context `arn:aws:eks:eu-west-3:590183910983:cluster/test-cluster` (deprecated)
+Deploy is manual using the github action  "Deploy to Kubernetes on EC2" job and passing as parameter the selected image tag from [the artifact repository](https://hub.docker.com/repository/docker/datracka/api/general)

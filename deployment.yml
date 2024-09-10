@@ -20,7 +20,8 @@ spec:
         image: PLACEHOLDER_IMAGE # PLACEHOLDER_IMAGE
         resources:
           limits:
-            cpu: "1"
+            cpu: "0.5"
             memory: "512Mi"
         ports:
         - containerPort: 80
+       
