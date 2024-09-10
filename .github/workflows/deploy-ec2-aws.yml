@@ -1,28 +1,22 @@
-name: Deploy to Kubernetes on AWS 
+name: Deploy to Kubernetes on EC2
 
 on:
   workflow_dispatch:
+    inputs:
+      IMAGE_TAG:
+        description: "Tag for the Docker image"
+        required: true
 
 jobs:
   deploy:
-    if: false
     runs-on: ubuntu-latest
     env:
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
       DOCKER_HUB_REPOSITORY: ${{ secrets.DOCKER_HUB_REPOSITORY }}
       IMAGE_NAME: "api"
-      IMAGE_TAG: ${{ github.sha }} 
+      IMAGE_TAG: ${{ github.event.inputs.IMAGE_TAG }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Install kubectl
         run: |
@@ -30,10 +24,12 @@ jobs:
           chmod +x ./kubectl
           sudo mv ./kubectl /usr/local/bin/kubectl
 
-      - name: Update kubeconfig
+      - name: Configure kubeconfig for the cluster
         run: |
-          aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER_NAME }}
-      
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_CONTENT }}" > ~/.kube/config  # Assuming you're storing the kubeconfig content in a GitHub secret
+          cat ~/.kube/config  # Optional: Verify the kubeconfig file
+
       - name: Verify kubectl connection
         run: |
           kubectl get nodes
@@ -43,6 +39,6 @@ jobs:
           sed -i "s|image: .*/api:.*|image: ${{ env.DOCKER_HUB_REPOSITORY }}/api:${{ env.IMAGE_TAG }}|" deployment.yml
           cat deployment.yml  # Output the deployment file for verification
 
-      - name: Deploy to EKS
+      - name: Deploy to self-managed K8S
         run: |
           kubectl apply -f deployment.yml

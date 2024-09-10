@@ -2,9 +2,9 @@ name: Check EC2 Cluster Connectivity
 
 on:
   workflow_dispatch:
-
 jobs:
   deploy:
+    if: false 
     runs-on: ubuntu-latest
     env:
       DOCKER_HUB_REPOSITORY: ${{ secrets.DOCKER_HUB_REPOSITORY }}
